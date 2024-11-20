@@ -1,0 +1,34 @@
+﻿@model IEnumerable<CMS.Models.LecturerSummaryViewModel>
+
+@{
+    ViewData["Title"] = "Lecturer Claims Summary";
+}
+
+<h1>Lecturer Claims Summary</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Lecturer Name</th>
+            <th>Total Owed</th>
+            <th>Total Hours Worked</th>
+            <th>Average Hourly Rate</th>
+            <th>Additional Notes</th>
+            <th>Last Submitted Date</th>
+           
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.LecturerName</td>
+                <td>@item.TotalOwed.ToString("C")</td> <!-- Format as currency -->
+                <td>@item.HoursWorked</td>
+                <td>@item.HourlyRate.ToString("C")</td> <!-- Format as currency -->
+                <td>@item.AdditionalNotes</td>
+                <td>@item.SubmittedDate.ToShortDateString()</td> <!-- Format date -->
+            </tr>
+        }
+    </tbody>
+</table>
