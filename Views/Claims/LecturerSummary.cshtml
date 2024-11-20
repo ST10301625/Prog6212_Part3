@@ -15,7 +15,7 @@
             <th>Average Hourly Rate</th>
             <th>Additional Notes</th>
             <th>Last Submitted Date</th>
-           
+            <th>Download Report</th> <!-- New column for download button -->
         </tr>
     </thead>
     <tbody>
@@ -28,6 +28,12 @@
                 <td>@item.HourlyRate.ToString("C")</td> <!-- Format as currency -->
                 <td>@item.AdditionalNotes</td>
                 <td>@item.SubmittedDate.ToShortDateString()</td> <!-- Format date -->
+                <td>
+                    <!-- Button to download the lecturer's claim report -->
+                    <a href="@Url.Action("DownloadLecturerReport", "Claims", new { lecturerName = item.LecturerName })" class="btn btn-primary">
+                        Download Report
+                    </a>
+                </td>
             </tr>
         }
     </tbody>

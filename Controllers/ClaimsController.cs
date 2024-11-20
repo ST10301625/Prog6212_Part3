@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using CMS.Data;
 using CMS.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Text;
 
 namespace CMS.Controllers
 {
@@ -285,6 +286,33 @@ namespace CMS.Controllers
             return View(lecturerClaims);
         }
         // 
+
+        public async Task<IActionResult> DownloadLecturerReport(string lecturerName)
+        {
+            // Get lecturer claims from the database
+            var lecturerClaims = await _context.Claim
+                .Where(c => c.LecturerName == lecturerName)
+                .ToListAsync();
+
+            if (lecturerClaims == null || !lecturerClaims.Any())
+            {
+                return NotFound();
+            }
+
+            // Create CSV content
+            var csvContent = new StringBuilder();
+            csvContent.AppendLine("Lecturer Name,Hours Worked,Hourly Rate,Total Owed,Additional Notes,Submitted Date,Status");
+
+            foreach (var claim in lecturerClaims)
+            {
+                csvContent.AppendLine($"{claim.LecturerName},{claim.HoursWorked},{claim.HourlyRate},{claim.HoursWorked * claim.HourlyRate},\"{claim.AdditionalNotes}\",{claim.SubmittedDate.ToShortDateString()},{claim.Status}");
+            }
+
+            // Return the CSV file as a download
+            var fileName = $"{lecturerName}_ClaimsReport_{DateTime.Now:yyyyMMdd}.csv";
+            return File(Encoding.UTF8.GetBytes(csvContent.ToString()), "text/csv", fileName);
+        }
+
 
     }
 
